@@ -12,7 +12,7 @@
         copyright notice, this list of conditions and the following
         disclaimer in the documentation and/or other materials provided
         with the distribution.
-      * Neither the name of gUF nor the names of its contributors may
+      * Neither the name of pcUF nor the names of its contributors may
         be used to endorse or promote products derived from this
         software without specific prior written permission.
 
@@ -29,16 +29,16 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------]]
 
----@class gUF
+---@class pcUF
 
-local gUF = LibStub("AceAddon-3.0"):NewAddon("gUF", "AceEvent-3.0")		-- Create the main addon object
-local L = LibStub("AceLocale-3.0"):GetLocale("gUF", true)				-- Localizations
-gUF.rev = "12.0.1 Alpha"
+local pcUF = LibStub("AceAddon-3.0"):NewAddon("pcUF", "AceEvent-3.0")		-- Create the main addon object
+local L = LibStub("AceLocale-3.0"):GetLocale("pcUF", true)				-- Localizations
+pcUF.rev = "12.0.1 Alpha"
 --local isPTR = select(4, GetBuildInfo()) >= 120001						-- Code for only getting a game toc to code for PTRs
 
 local frames = {}														-- Table for units we are currently listening for
 
-function gUF:OnInitialize()												-- ADDON_LOADED event for gUF
+function pcUF:OnInitialize()												-- ADDON_LOADED event for pcUF
 	self.defaults = {													-- Defaults for the entire mod
 		profile = {
 			global = {
@@ -242,7 +242,7 @@ function gUF:OnInitialize()												-- ADDON_LOADED event for gUF
 	self:Print("|cffffff00v"..self.rev.." loaded")
 end
 
-function gUF:OnEnable()																	-- PLAYER_LOGIN event for gUF
+function pcUF:OnEnable()																	-- PLAYER_LOGIN event for pcUF
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	self:RegisterEvent("GROUP_ROSTER_UPDATE")
 	self:RegisterEvent("PARTY_LEADER_CHANGED")
@@ -270,11 +270,11 @@ function gUF:OnEnable()																	-- PLAYER_LOGIN event for gUF
 	-- self:RegisterEvent("VOICE_START")
 	-- self:RegisterEvent("VOICE_STOP")
 
-	self.db = LibStub:GetLibrary("AceDB-3.0"):New("gUFDB", self.defaults, true)			-- Initialize the saved variables database with the default settings
+	self.db = LibStub:GetLibrary("AceDB-3.0"):New("pcUFDB", self.defaults, true)			-- Initialize the saved variables database with the default settings
 
 	--Slash Command stuff
-	SLASH_gUF1 = "/guf"
-	SlashCmdList["gUF"] = function(msg)
+	SLASH_pcUF1 = "/pcUF"
+	SlashCmdList["pcUF"] = function(msg)
 		msg = msg and string.lower(msg)
 		if (msg == "version") then
 			self:Print("|cffffff00v"..self.rev)
@@ -282,12 +282,12 @@ function gUF:OnEnable()																	-- PLAYER_LOGIN event for gUF
 			if (InCombatLockdown() == true) then
 				self:Print(L["Options cannot be changed in combat."])
 			else
-				local loaded, reason = C_AddOns.LoadAddOn("gUF_Options")
+				local loaded, reason = C_AddOns.LoadAddOn("pcUF_Options")
 				if (loaded) then
-					LibStub("AceConfig-3.0"):RegisterOptionsTable("gUF", gUF.options)	-- Initialize AceConfig-3.0
-					LibStub("AceConfigDialog-3.0"):Open("gUF")
+					LibStub("AceConfig-3.0"):RegisterOptionsTable("pcUF", pcUF.options)	-- Initialize AceConfig-3.0
+					LibStub("AceConfigDialog-3.0"):Open("pcUF")
 				else
-					self:Print(L["Failed to load gUF_Options.  The options menu failed to load because: "]..reason)
+					self:Print(L["Failed to load pcUF_Options.  The options menu failed to load because: "]..reason)
 					return
 				end
 			end
@@ -306,15 +306,15 @@ function gUF:OnEnable()																	-- PLAYER_LOGIN event for gUF
 	self:UpdateLootMethod()
 end
 
-function gUF:Print(msg)
-	DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99gUF|r: "..tostring(msg))
+function pcUF:Print(msg)
+	DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99pcUF|r: "..tostring(msg))
 end
 
 
 --------------------
 -- Event Handlers --
 --------------------
-function gUF:PLAYER_ENTERING_WORLD(event)
+function pcUF:PLAYER_ENTERING_WORLD(event)
 	-- Color the player's name correctly when zoning
 	self:UNIT_FACTION(nil, "player")
 	self:UNIT_FACTION(nil, "target")
@@ -323,7 +323,7 @@ function gUF:PLAYER_ENTERING_WORLD(event)
 	self:UpdateCombatRestIcon(nil)
 end
 
-function gUF:UNIT_HEALTH(event, unit)
+function pcUF:UNIT_HEALTH(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -388,7 +388,7 @@ function gUF:UNIT_HEALTH(event, unit)
 	end
 end
 
-function gUF:UNIT_MAXHEALTH(event, unit)
+function pcUF:UNIT_MAXHEALTH(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -397,7 +397,7 @@ function gUF:UNIT_MAXHEALTH(event, unit)
 	end
 end
 
-function gUF:UNIT_POWER_FREQUENT(event, unit)
+function pcUF:UNIT_POWER_FREQUENT(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -505,7 +505,7 @@ function gUF:UNIT_POWER_FREQUENT(event, unit)
 	end
 end
 
-function gUF:UNIT_MAXPOWER(event, unit)
+function pcUF:UNIT_MAXPOWER(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -537,7 +537,7 @@ function gUF:UNIT_MAXPOWER(event, unit)
 	end
 end
 
-function gUF:UNIT_DISPLAYPOWER(event, unit)
+function pcUF:UNIT_DISPLAYPOWER(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -569,7 +569,7 @@ function gUF:UNIT_DISPLAYPOWER(event, unit)
 	end
 end
 
-function gUF:UNIT_LEVEL(event, unit)
+function pcUF:UNIT_LEVEL(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -611,7 +611,7 @@ function gUF:UNIT_LEVEL(event, unit)
 	end
 end
 
-function gUF:UNIT_NAME_UPDATE(event, unit)
+function pcUF:UNIT_NAME_UPDATE(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -628,7 +628,7 @@ function gUF:UNIT_NAME_UPDATE(event, unit)
 	end
 end
 
-function gUF:UNIT_PORTRAIT_UPDATE(event, unit)
+function pcUF:UNIT_PORTRAIT_UPDATE(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -647,7 +647,7 @@ function gUF:UNIT_PORTRAIT_UPDATE(event, unit)
 	end
 end
 
-function gUF:PLAYER_FLAGS_CHANGED(event, unit)
+function pcUF:PLAYER_FLAGS_CHANGED(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -655,7 +655,7 @@ function gUF:PLAYER_FLAGS_CHANGED(event, unit)
 	end
 end
 
-function gUF:RAID_TARGET_UPDATE()
+function pcUF:RAID_TARGET_UPDATE()
 	for i,v in pairs(frames) do
 		for frame in pairs(v) do
 			self:UpdateRaidIcon(frame)
@@ -663,7 +663,7 @@ function gUF:RAID_TARGET_UPDATE()
 	end
 end
 
-function gUF:UNIT_FACTION(event, unit)
+function pcUF:UNIT_FACTION(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -750,7 +750,7 @@ function gUF:UNIT_FACTION(event, unit)
 	end
 end
 
--- function gUF:UNIT_DYNAMIC_FLAGS(event, unit)
+-- function pcUF:UNIT_DYNAMIC_FLAGS(event, unit)
 -- 	if not frames[unit] then return end
 
 -- 	for frame in pairs(frames[unit]) do
@@ -816,13 +816,13 @@ end
 -- 	end
 -- end
 
-function gUF:UNIT_AURA(event, unit)
+function pcUF:UNIT_AURA(event, unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
 		if (UnitName(unit)) then														-- "target" needed this check in the past, haven't checked recently
 			local _, color																-- Variables for both buffs and debuffs
-			local button = _G["gUF_"..unit].buffs										-- Reference the main icon for the buff
+			local button = _G["pcUF_"..unit].buffs										-- Reference the main icon for the buff
 
 			local numBuffs = 0															-- Buff counter for correct layout
 			for buffnum=1,self.db.profile[unit].buffs[L["Number of Buffs"]] do			-- Start main buff loop
@@ -863,7 +863,7 @@ function gUF:UNIT_AURA(event, unit)
 				end
 			end																				-- End main buff loop
 
-			button = _G["gUF_"..unit].debuffs												-- Reference the main icon for the buff
+			button = _G["pcUF_"..unit].debuffs												-- Reference the main icon for the buff
 			local numDebuffs = 0															-- Debuff counter for correct layout
 			local curableDebuffFound = 0													-- Flag to stop running curable debuff checks once one is found
 			for debuffnum=1,self.db.profile[unit].debuffs[L["Number of Debuffs"]] do		-- Start main debuff loop
@@ -924,7 +924,7 @@ function gUF:UNIT_AURA(event, unit)
 			end
 
 			if (self.db.profile[unit][L["Classic Buff & Debuff Mode"]] == true) then
-				local frame = _G["gUF_"..unit]
+				local frame = _G["pcUF_"..unit]
 				frame.buffs[1]:ClearAllPoints()
 				frame.debuffs[1]:ClearAllPoints()
 				if (UnitIsFriend("player", unit)) then
@@ -1033,7 +1033,7 @@ function gUF:UNIT_AURA(event, unit)
 	end
 end
 
--- function gUF:VOICE_START(event, unit)
+-- function pcUF:VOICE_START(event, unit)
 -- 	if not frames[unit] then return end
 
 -- 	for frame in pairs(frames[unit]) do
@@ -1042,7 +1042,7 @@ end
 -- 	end
 -- end
 
--- function gUF:VOICE_STOP(event, unit)
+-- function pcUF:VOICE_STOP(event, unit)
 -- 	if not frames[unit] then return end
 
 -- 	for frame in pairs(frames[unit]) do
@@ -1051,14 +1051,14 @@ end
 -- 	end
 -- end
 
-function gUF:PLAYER_TARGET_CHANGED()
+function pcUF:PLAYER_TARGET_CHANGED()
 	if (UnitExists("target")) then
 		self:UpdateFrameInfo("target")
 	end
 end
 
-function gUF:PLAYER_REGEN_DISABLED(event)
-	if (LibStub("AceConfigDialog-3.0"):Close("gUF")) then
+function pcUF:PLAYER_REGEN_DISABLED(event)
+	if (LibStub("AceConfigDialog-3.0"):Close("pcUF")) then
 		self:Print(L["Options cannot be changed in combat."])
 	end
 	if (self.db.profile.global[L["Config Mode"]] == true) then
@@ -1066,42 +1066,42 @@ function gUF:PLAYER_REGEN_DISABLED(event)
 		-- Call stuff to get the frames back to normal
 	end
 	self:UpdateCombatRestIcon(event)
-	if (gUF_player) then
-		self:DragStop(gUF_player)
+	if (pcUF_player) then
+		self:DragStop(pcUF_player)
 	end
-	if (gUF_target) then
-		self:DragStop(gUF_target)
+	if (pcUF_target) then
+		self:DragStop(pcUF_target)
 	end
 end
 
-function gUF:PLAYER_REGEN_ENABLED(event)
+function pcUF:PLAYER_REGEN_ENABLED(event)
 	self:UpdateCombatRestIcon(event)
 end
 
-function gUF:PLAYER_UPDATE_RESTING(event)
+function pcUF:PLAYER_UPDATE_RESTING(event)
 	self:UpdateCombatRestIcon(event)
 end
 
-function gUF:ACTIVE_TALENT_GROUP_CHANGED(event)
-	self:SetStyle(gUF_player, "player")
+function pcUF:ACTIVE_TALENT_GROUP_CHANGED(event)
+	self:SetStyle(pcUF_player, "player")
 	self:UNIT_AURA(nil, "player")
 end
 
-function gUF:GROUP_ROSTER_UPDATE(event)
+function pcUF:GROUP_ROSTER_UPDATE(event)
 	self:UpdateLeader(nil)
 	self:UpdateLootMethod()
 end
 
-function gUF:PARTY_LEADER_CHANGED(event)
+function pcUF:PARTY_LEADER_CHANGED(event)
 	self:UpdateLeader(nil)
 	self:UpdateLootMethod()
 end
 
-function gUF:PARTY_LOOT_METHOD_CHANGED(event)
+function pcUF:PARTY_LOOT_METHOD_CHANGED(event)
 	self:UpdateLootMethod()
 end
 
-function gUF:UpdateLeader(unit)
+function pcUF:UpdateLeader(unit)
 	if (unit == nil) then
 		for i,v in pairs(frames) do
 			for frame in pairs(v) do
@@ -1125,49 +1125,49 @@ function gUF:UpdateLeader(unit)
 	end
 end
 
-function gUF:UpdateLootMethod()
+function pcUF:UpdateLootMethod()
 	local _, masterLootPartyID = C_PartyInfo.GetLootMethod()
 
 	if (masterLootPartyID == 0) then
-		gUF_player.masterlootericon:Show()
-		-- gUF_party1.masterlootericon:Hide()
-		-- gUF_party2.masterlootericon:Hide()
-		-- gUF_party3.masterlootericon:Hide()
-		-- gUF_party4.masterlootericon:Hide()
+		pcUF_player.masterlootericon:Show()
+		-- pcUF_party1.masterlootericon:Hide()
+		-- pcUF_party2.masterlootericon:Hide()
+		-- pcUF_party3.masterlootericon:Hide()
+		-- pcUF_party4.masterlootericon:Hide()
 	elseif (masterLootPartyID == 1) then
-		gUF_player.masterlootericon:Hide()
-		-- gUF_party1.masterlootericon:Show()
-		-- gUF_party2.masterlootericon:Hide()
-		-- gUF_party3.masterlootericon:Hide()
-		-- gUF_party4.masterlootericon:Hide()
+		pcUF_player.masterlootericon:Hide()
+		-- pcUF_party1.masterlootericon:Show()
+		-- pcUF_party2.masterlootericon:Hide()
+		-- pcUF_party3.masterlootericon:Hide()
+		-- pcUF_party4.masterlootericon:Hide()
 	elseif (masterLootPartyID == 2) then
-		gUF_player.masterlootericon:Hide()
-		-- gUF_party1.masterlootericon:Hide()
-		-- gUF_party2.masterlootericon:Show()
-		-- gUF_party3.masterlootericon:Hide()
-		-- gUF_party4.masterlootericon:Hide()
+		pcUF_player.masterlootericon:Hide()
+		-- pcUF_party1.masterlootericon:Hide()
+		-- pcUF_party2.masterlootericon:Show()
+		-- pcUF_party3.masterlootericon:Hide()
+		-- pcUF_party4.masterlootericon:Hide()
 	elseif (masterLootPartyID == 3) then
-		gUF_player.masterlootericon:Hide()
-		-- gUF_party1.masterlootericon:Hide()
-		-- gUF_party2.masterlootericon:Hide()
-		-- gUF_party3.masterlootericon:Show()
-		-- gUF_party4.masterlootericon:Hide()
+		pcUF_player.masterlootericon:Hide()
+		-- pcUF_party1.masterlootericon:Hide()
+		-- pcUF_party2.masterlootericon:Hide()
+		-- pcUF_party3.masterlootericon:Show()
+		-- pcUF_party4.masterlootericon:Hide()
 	elseif (masterLootPartyID == 4) then
-		gUF_player.masterlootericon:Hide()
-		-- gUF_party1.masterlootericon:Hide()
-		-- gUF_party2.masterlootericon:Hide()
-		-- gUF_party3.masterlootericon:Show()
-		-- gUF_party4.masterlootericon:Hide()
+		pcUF_player.masterlootericon:Hide()
+		-- pcUF_party1.masterlootericon:Hide()
+		-- pcUF_party2.masterlootericon:Hide()
+		-- pcUF_party3.masterlootericon:Show()
+		-- pcUF_party4.masterlootericon:Hide()
 	else
-		gUF_player.masterlootericon:Hide()
-		-- gUF_party1.masterlootericon:Hide()
-		-- gUF_party2.masterlootericon:Hide()
-		-- gUF_party3.masterlootericon:Hide()
-		-- gUF_party4.masterlootericon:Hide()
+		pcUF_player.masterlootericon:Hide()
+		-- pcUF_party1.masterlootericon:Hide()
+		-- pcUF_party2.masterlootericon:Hide()
+		-- pcUF_party3.masterlootericon:Hide()
+		-- pcUF_party4.masterlootericon:Hide()
 	end
 end
 
-function gUF:FormatHealthPowerText(number)
+function pcUF:FormatHealthPowerText(number)
 	if (number < 9999) then
 		return number
 	elseif (number < 999999) then
@@ -1179,7 +1179,7 @@ function gUF:FormatHealthPowerText(number)
 	return string.format("%dm", number / 1000000)
 end
 
-function gUF:UpdateCombatRestIcon(event)
+function pcUF:UpdateCombatRestIcon(event)
 	local unit = "player"
 	if not frames[unit] then return end
 
@@ -1196,7 +1196,7 @@ function gUF:UpdateCombatRestIcon(event)
 	end
 end
 
-function gUF:UpdateRaidIcon(frame)
+function pcUF:UpdateRaidIcon(frame)
 	local raidTargetIconIndex = GetRaidTargetIndex(frame.unit)
 	if (raidTargetIconIndex) then
 		SetRaidTargetIconTexture(frame.raidicon, raidTargetIconIndex)
@@ -1206,7 +1206,7 @@ function gUF:UpdateRaidIcon(frame)
 	end
 end
 
-function gUF:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCharges)
+function pcUF:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxCharges)
 	if (enable and enable ~= 0) then
 		self:SetCooldown(start, duration, charges, maxCharges)
 
@@ -1217,12 +1217,12 @@ function gUF:CooldownFrame_SetTimer(self, start, duration, enable, charges, maxC
 	end
 end
 
-function gUF:EnableDisableModules()
+function pcUF:EnableDisableModules()
 	-- Wrap in an if statement to see if it really is enabled once options are built
 	--self:EnableModule("CastBar")
 end
 
-function gUF:UpdateFrameInfo(unit)
+function pcUF:UpdateFrameInfo(unit)
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
@@ -1269,16 +1269,16 @@ function gUF:UpdateFrameInfo(unit)
 	end
 end
 
-function gUF:SetStyleAllFrames()
-	if (gUF_player) then
-		self:SetStyle(gUF_player, "player")
+function pcUF:SetStyleAllFrames()
+	if (pcUF_player) then
+		self:SetStyle(pcUF_player, "player")
 	end
-	if (gUF_target) then
-		self:SetStyle(gUF_target, "target")
+	if (pcUF_target) then
+		self:SetStyle(pcUF_target, "target")
 	end
 end
 
-function gUF:SetStyle(frame, unit)
+function pcUF:SetStyle(frame, unit)
 	if (frame) then
 		if (unit == "player") then
 			frame.fkeytext:Hide()
@@ -1356,37 +1356,37 @@ function gUF:SetStyle(frame, unit)
 	end
 end
 
-function gUF:CreateRemoveFrames()
+function pcUF:CreateRemoveFrames()
 	if (self.db.profile.player[L["Enabled"]] == true) then			-- Create the Player frame
-		if (not gUF_player) then
-			self:CreateFrame("normal", "gUF_player", "player")
+		if (not pcUF_player) then
+			self:CreateFrame("normal", "pcUF_player", "player")
 		else
-			self:RegisterFrame(gUF_player, "player")
+			self:RegisterFrame(pcUF_player, "player")
 		end
-		self:SetStyle(gUF_player, "player")							-- Apply any option changes
+		self:SetStyle(pcUF_player, "player")							-- Apply any option changes
 		self:UpdateFrameInfo("player")								-- Update the frame's information
 	else
-		if (gUF_player) then
-			self:RemoveFrame(gUF_player)
+		if (pcUF_player) then
+			self:RemoveFrame(pcUF_player)
 		end
 	end
 
 	if (self.db.profile.target[L["Enabled"]] == true) then			-- Create the Target frame
-		if (not gUF_target) then
-			self:CreateFrame("target", "gUF_target", "target")
+		if (not pcUF_target) then
+			self:CreateFrame("target", "pcUF_target", "target")
 		else
-			self:RegisterFrame(gUF_target, "target")
+			self:RegisterFrame(pcUF_target, "target")
 		end
-		self:SetStyle(gUF_target, "target")							-- Apply any option changes
+		self:SetStyle(pcUF_target, "target")							-- Apply any option changes
 		self:UpdateFrameInfo("target")								-- Update the frame's information
 	else
-		if (gUF_target) then
-			self:RemoveFrame(gUF_target)
+		if (pcUF_target) then
+			self:RemoveFrame(pcUF_target)
 		end
 	end
 end
 
-function gUF:GetDebuffNumberForFrame(unit)
+function pcUF:GetDebuffNumberForFrame(unit)
 	if (unit == "target") then
 		return 40
 	else
@@ -1394,7 +1394,7 @@ function gUF:GetDebuffNumberForFrame(unit)
 	end
 end
 
-function gUF:CreateFrame(frametemplate, framename, unit)
+function pcUF:CreateFrame(frametemplate, framename, unit)
 	local frame
 
 	if (frametemplate == "normal") then
@@ -1452,9 +1452,9 @@ function gUF:CreateFrame(frametemplate, framename, unit)
 	self:RegisterFrame(frame, unit)
 end
 
-function gUF:LayoutBuffs(frame, unit, buffType)
+function pcUF:LayoutBuffs(frame, unit, buffType)
 	if (frame == nil) then
-		frame = _G["gUF_"..unit]
+		frame = _G["pcUF_"..unit]
 	end
 	local j = 1
 	local k
@@ -1487,7 +1487,7 @@ function gUF:LayoutBuffs(frame, unit, buffType)
 	end
 end
 
-function gUF:GetInitialBuffAndDebuffAnchorPoint(frame, buffType, buffIndex)
+function pcUF:GetInitialBuffAndDebuffAnchorPoint(frame, buffType, buffIndex)
 	if (self.db.profile[frame.unit][buffType][L["Position"]] == 1) then
 		if (frame.unit == "player") then
 			--frame[buffType][buffIndex]:SetPoint("TOPLEFT", frame.levelframe, "BOTTOMLEFT", 0 + self.db.profile[frame.unit][buffType][L["X Offset"]], 0 + self.db.profile[frame.unit][buffType][L["Y Offset"]])
@@ -1513,8 +1513,8 @@ function gUF:GetInitialBuffAndDebuffAnchorPoint(frame, buffType, buffIndex)
 	end
 end
 
-function gUF:ResetBuffsAndDebuffs(unit)
-	local frame = _G["gUF_"..unit]
+function pcUF:ResetBuffsAndDebuffs(unit)
+	local frame = _G["pcUF_"..unit]
 	for i=1,20 do
 		self:CooldownFrame_SetTimer(frame.buffs[i].cooldown, 0, 0, 0)
 		frame.buffs[i].cooldown:Hide()
@@ -1531,16 +1531,16 @@ end
 
 -- /script perltestthree()
 -- function perltestthree()
--- 	for i,v in ipairs(gUF_player.buffs) do gUF:Print(i,v) end
+-- 	for i,v in ipairs(pcUF_player.buffs) do pcUF:Print(i,v) end
 -- end
 
--- --/script guftest2()
--- function guftest2()
+-- --/script pcUFtest2()
+-- function pcUFtest2()
 -- 	--CastBar:CreateRemoveFrames()
--- 	gUF:Print( gUF_player.arcanebar:GetValue() )
+-- 	pcUF:Print( pcUF_player.arcanebar:GetValue() )
 -- end
 
--- function gUF:GetActiveUnitFrameNames()
+-- function pcUF:GetActiveUnitFrameNames()
 -- 	local framenames = {}
 -- 	for i,v in pairs(frames) do
 -- 		for frame in pairs(v) do
@@ -1552,24 +1552,24 @@ end
 -- 	return framenames
 -- end
 
-function gUF:GetActiveUnitFrames()					-- Used in modules
+function pcUF:GetActiveUnitFrames()					-- Used in modules
 	return frames
 end
 
-function gUF:RegisterFrame(frame, unit)
+function pcUF:RegisterFrame(frame, unit)
 	frame:SetAttribute("unit", unit)				-- Next 4 lines probably needs moving later
 	RegisterUnitWatch(frame)
 	frames[unit] = frames[unit] or {}
 	frames[unit][frame] = true
 end
 
-function gUF:RemoveFrame(frame)
+function pcUF:RemoveFrame(frame)
 	frames[frame.unit][frame] = nil
 	UnregisterUnitWatch(frame)
 	frame:Hide()
 end
 
-function gUF:SetupOverlays(frame)
+function pcUF:SetupOverlays(frame)
 	for i=1,#frame.frameoverlays,1 do
 		frame.frameoverlays[i]:SetFrameLevel(frame.frameoverlays[i]:GetParent():GetFrameLevel() + 2)
 	end
@@ -1578,7 +1578,7 @@ function gUF:SetupOverlays(frame)
 	end
 end
 
-function gUF:SetupAllBorderBackground()
+function pcUF:SetupAllBorderBackground()
 	for i,v in pairs(frames) do
 		for frame in pairs(v) do
 			self:SetupBorderBackground(frame)
@@ -1586,15 +1586,15 @@ function gUF:SetupAllBorderBackground()
 	end
 end
 
-function gUF:SetupBorderBackground(frame)
+function pcUF:SetupBorderBackground(frame)
 	for i=1,#frame.frames,1 do
-		frame.frames[i]:SetBackdrop({bgFile = "Interface\\AddOns\\gUF\\Images\\gUF_FrameBack", edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", tile = true, tileSize = 16, edgeSize = 16, insets = {left = 3, right = 3, top = 3, bottom = 3}})	-- Thanks Zek for the background file help
+		frame.frames[i]:SetBackdrop({bgFile = "Interface\\AddOns\\pcUF\\Images\\pcUF_FrameBack", edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", tile = true, tileSize = 16, edgeSize = 16, insets = {left = 3, right = 3, top = 3, bottom = 3}})	-- Thanks Zek for the background file help
 		frame.frames[i]:SetBackdropColor(self.db.profile.global[L["Background Color"]].r, self.db.profile.global[L["Background Color"]].g, self.db.profile.global[L["Background Color"]].b, self.db.profile.global[L["Background Color"]].a)
 		frame.frames[i]:SetBackdropBorderColor(self.db.profile.global[L["Border Color"]].r, self.db.profile.global[L["Border Color"]].g, self.db.profile.global[L["Border Color"]].b, self.db.profile.global[L["Border Color"]].a)
 	end
 end
 
-function gUF:SetupAllStatusBarTextures()
+function pcUF:SetupAllStatusBarTextures()
 	for i,v in pairs(frames) do
 		for frame in pairs(v) do
 			self:SetupStatusBarTextures(frame)
@@ -1602,7 +1602,7 @@ function gUF:SetupAllStatusBarTextures()
 	end
 end
 
-function gUF:SetupStatusBarTextures(frame)
+function pcUF:SetupStatusBarTextures(frame)
 	local texture = self.LSM:Fetch(self.LSM.MediaType.STATUSBAR, self.db.profile.global[L["Status Bar Texture"]])
 	--local texture = self.LSM:Fetch("statusbar", self.db.profile.global[L["Status Bar Texture"]])
 	--texture:SetPoint("TOPLEFT", frame.healthbar, "TOPLEFT", -1,1)
@@ -1622,7 +1622,7 @@ function gUF:SetupStatusBarTextures(frame)
 	--frame.healthbarbg:SetStatusBarColor(self.db.profile.global[L["Health Bar Color"]].r, self.db.profile.global[L["Health Bar Color"]].g, self.db.profile.global[L["Health Bar Color"]].b, self.db.profile.global[L["Health Bar Color"]].a * 0.25)
 end
 
-function gUF:SetupAllStatusBarBackgroundTextures()
+function pcUF:SetupAllStatusBarBackgroundTextures()
 	for i,v in pairs(frames) do
 		for frame in pairs(v) do
 			self:SetupStatusBarBackgroundTextures(frame)
@@ -1630,7 +1630,7 @@ function gUF:SetupAllStatusBarBackgroundTextures()
 	end
 end
 
-function gUF:SetupStatusBarBackgroundTextures(frame)
+function pcUF:SetupStatusBarBackgroundTextures(frame)
 	--local texture = self.LSM:Fetch(self.LSM.MediaType.STATUSBAR, self.db.profile.global[L["Status Bar Background Texture"]])
 	local texture = self.LSM:Fetch("statusbar", self.db.profile.global[L["Status Bar Background Texture"]])
 	--texture:SetHeight(10)
@@ -1645,7 +1645,7 @@ function gUF:SetupStatusBarBackgroundTextures(frame)
 	end
 end
 
-function gUF:InitializeBarColorArray()
+function pcUF:InitializeBarColorArray()
 	self.BarColor = {
 		[0] = self.db.profile.global[L["Mana Bar Color"]],
 		[1] = self.db.profile.global[L["Rage Bar Color"]],
@@ -1667,7 +1667,7 @@ function gUF:InitializeBarColorArray()
 	}
 end
 
-function gUF:SetupAllBarColors()
+function pcUF:SetupAllBarColors()
 	self:InitializeBarColorArray()
 
 	for i,v in pairs(frames) do
@@ -1677,7 +1677,7 @@ function gUF:SetupAllBarColors()
 	end
 end
 
-function gUF:SetupBarColors(frame)
+function pcUF:SetupBarColors(frame)
 	frame.healthbar:SetStatusBarColor(self.db.profile.global[L["Health Bar Color"]].r, self.db.profile.global[L["Health Bar Color"]].g, self.db.profile.global[L["Health Bar Color"]].b, self.db.profile.global[L["Health Bar Color"]].a)
 	frame.healthbarbg:SetStatusBarColor(self.db.profile.global[L["Health Bar Color"]].r, self.db.profile.global[L["Health Bar Color"]].g, self.db.profile.global[L["Health Bar Color"]].b, self.db.profile.global[L["Health Bar Color"]].a * 0.25)
 	if (frame.unit == "player") then
@@ -1716,23 +1716,23 @@ end
 --------------------
 -- Click Handlers --
 --------------------
-function gUF:DragStart(frame)
-	if (gUF.db.profile.global[L["Lock Frames"]] == false) then
+function pcUF:DragStart(frame)
+	if (pcUF.db.profile.global[L["Lock Frames"]] == false) then
 		if (InCombatLockdown() == false) then
 			frame:StartMoving()
 		end
 	end
 end
 
-function gUF:DragStop(frame)
+function pcUF:DragStop(frame)
 	if (InCombatLockdown() == false) then
 		frame:StopMovingOrSizing()
-		gUF.db.profile[frame.unit][L["Position"]].x = floor(frame:GetLeft() + 0.5)
-		gUF.db.profile[frame.unit][L["Position"]].y = floor(frame:GetTop() - (UIParent:GetTop() / frame:GetScale()) + 0.5)
+		pcUF.db.profile[frame.unit][L["Position"]].x = floor(frame:GetLeft() + 0.5)
+		pcUF.db.profile[frame.unit][L["Position"]].y = floor(frame:GetTop() - (UIParent:GetTop() / frame:GetScale()) + 0.5)
 	end
 end
 
-function gUF:Overlay_OnLoad(frame, overlay, unit)
+function pcUF:Overlay_OnLoad(frame, overlay, unit)
 	overlay:SetAttribute("unit", unit)				-- Assign the Overlay frame a unit (eg. player, party1, target)
 
 	overlay:SetAttribute("*type1", "target")		-- Any left click will target the unit in the given frame
@@ -1749,12 +1749,12 @@ end
 -------------
 -- Tooltip --
 -------------
-function gUF:BuffTooltip(self)
+function pcUF:BuffTooltip(self)
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 	GameTooltip:SetUnitBuff(self.unit, self.id, displaycastablebuffs)		-- change the displaycastablebuffs argument name
 end
 
-function gUF:DebuffTooltip(self)
+function pcUF:DebuffTooltip(self)
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
 	GameTooltip:SetUnitDebuff(self.unit, self.id, displaycastabledebuffs)	-- change the displaycastablebuffs argument name
 end

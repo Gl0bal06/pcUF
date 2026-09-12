@@ -1,12 +1,12 @@
-local gUF = LibStub("AceAddon-3.0"):GetAddon("gUF")
-local L = LibStub("AceLocale-3.0"):GetLocale("gUF", true)
-local CastBar = gUF:NewModule("CastBar", "AceEvent-3.0")
+local pcUF = LibStub("AceAddon-3.0"):GetAddon("pcUF")
+local L = LibStub("AceLocale-3.0"):GetLocale("pcUF", true)
+local CastBar = pcUF:NewModule("CastBar", "AceEvent-3.0")
 
 local bars = {}
 local frames = {}
 
 function CastBar:OnInitialize()
-	gUF:Print("CastBar Module - OnInitialize")
+	pcUF:Print("CastBar Module - OnInitialize")
 
 	self:SetEnabledState(false)
 
@@ -16,7 +16,7 @@ function CastBar:OnInitialize()
 end
 
 function CastBar:OnEnable()
-	gUF:Print("CastBar Module - OnEnable")
+	pcUF:Print("CastBar Module - OnEnable")
 
 	self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
 	self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP", "EventStopCast")
@@ -32,32 +32,32 @@ function CastBar:OnEnable()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", "EventUnitChanged")
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED", "EventUnitChanged")
 
-	self.db = gUF.db:RegisterNamespace("gUFDB", self.defaults)
+	self.db = pcUF.db:RegisterNamespace("pcUFDB", self.defaults)
 
 	self:CreateRemoveFrames()											-- Create any frames that are enabled
 end
 
 function CastBar:OnDisable()
-	gUF:Print("CastBar Module - OnDisable")
+	pcUF:Print("CastBar Module - OnDisable")
 
 	self:UnregisterAllEvents()
 end
 
 function CastBar:UNIT_SPELLCAST_CHANNEL_START(event, unit)
-	--gUF:Print("CastBar Module - "..event.." - "..unit)
+	--pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
 
 			local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible = UnitChannelInfo(unit)
-			if (not name or (not gUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
+			if (not name or (not pcUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
 				-- if there is no name, there is no bar
 				frame.arcanebar:Hide()
 				return
 			end
 
-			if (gUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
+			if (pcUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
 				--if (name == nil) then
 					--frame.arcanebar.nametext:SetText(L["Channeling"])
 				--else
@@ -72,9 +72,9 @@ function CastBar:UNIT_SPELLCAST_CHANNEL_START(event, unit)
 			frame.arcanebar.endTime = (endTime / 1000) - GetTime()
 
 			--if (notInterruptible) then
-			--	frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].r, gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].g, gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].b)
+			--	frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].r, pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].g, pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].b)
 			--else
-				frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Channelling Color"]].r, gUF.db.profile.module.castbar[L["Channelling Color"]].g, gUF.db.profile.module.castbar[L["Channelling Color"]].b)
+				frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Channelling Color"]].r, pcUF.db.profile.module.castbar[L["Channelling Color"]].g, pcUF.db.profile.module.castbar[L["Channelling Color"]].b)
 			--end
 			frame.arcanebar.value = (endTime / 1000) - GetTime()
 			frame.arcanebar.maxValue = (endTime - startTime) / 1000
@@ -105,7 +105,7 @@ function CastBar:UNIT_SPELLCAST_CHANNEL_START(event, unit)
 end
 
 function CastBar:UNIT_SPELLCAST_CHANNEL_UPDATE(event, unit)
-	--gUF:Print("CastBar Module - "..event.." - "..unit)
+	--pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
@@ -114,7 +114,7 @@ function CastBar:UNIT_SPELLCAST_CHANNEL_UPDATE(event, unit)
 		if (frame.arcanebar:IsShown()) then
 
 			local name, text, texture, startTime, endTime, isTradeSkill = UnitChannelInfo(unit)
-			if (not name or (not gUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
+			if (not name or (not pcUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
 				-- if there is no name, there is no bar
 				frame.arcanebar:Hide()
 				return
@@ -135,7 +135,7 @@ function CastBar:UNIT_SPELLCAST_CHANNEL_UPDATE(event, unit)
 end
 
 function CastBar:UNIT_SPELLCAST_DELAYED(event, unit)
-	--gUF:Print("CastBar Module - "..event.." - "..unit)
+	--pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
@@ -144,7 +144,7 @@ function CastBar:UNIT_SPELLCAST_DELAYED(event, unit)
 		if(frame.arcanebar:IsShown()) then
 
 			local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible = UnitCastingInfo(unit)
-			if (not name or (not gUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
+			if (not name or (not pcUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
 				-- if there is no name, there is no bar
 				frame.arcanebar:Hide()
 				return
@@ -175,7 +175,7 @@ function CastBar:UNIT_SPELLCAST_DELAYED(event, unit)
 end
 
 function CastBar:UNIT_SPELLCAST_START(event, unit)
-	--gUF:Print("CastBar Module - "..event.." - "..unit)
+	--pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
@@ -184,12 +184,12 @@ function CastBar:UNIT_SPELLCAST_START(event, unit)
 		-- --frame.arcanebar:UNIT_HEALTH(nil, unit)
 
 		local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible = UnitCastingInfo(unit)
-		if (not name or (not gUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
+		if (not name or (not pcUF.db.profile.module.castbar[L["TradeSkills"]] and isTradeSkill)) then
 			frame.arcanebar:Hide()
 			return
 		end
 
-		if (gUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
+		if (pcUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
 			frame.arcanebar.nametext:SetText(name)
 			frame.arcanebar.nametext:SetTextColor(frame.nametext:GetTextColor())
 			frame.arcanebar.nametext:Show()
@@ -197,9 +197,9 @@ function CastBar:UNIT_SPELLCAST_START(event, unit)
 		end
 
 		--if (notInterruptible) then
-		--	frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].r, gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].g, gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].b)
+		--	frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].r, pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].g, pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].b)
 		--else
-			frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Casting Color"]].r, gUF.db.profile.module.castbar[L["Casting Color"]].g, gUF.db.profile.module.castbar[L["Casting Color"]].b)
+			frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Casting Color"]].r, pcUF.db.profile.module.castbar[L["Casting Color"]].g, pcUF.db.profile.module.castbar[L["Casting Color"]].b)
 		--end
 
 		frame.arcanebar.value = (GetTime() - (startTime / 1000))
@@ -232,7 +232,7 @@ function CastBar:UNIT_SPELLCAST_START(event, unit)
 end
 
 function CastBar:EventInterruptibleState(event, unit)
-	gUF:Print("CastBar Module - "..event.." - "..unit)
+	pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
@@ -243,14 +243,14 @@ end
 
 function CastBar:UpdateInterruptibleState(frame, notInterruptible)
 	if (event == "UNIT_SPELLCAST_INTERRUPTIBLE") then
-		frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].r, gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].g, gUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].b)
+		frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].r, pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].g, pcUF.db.profile.module.castbar[L["Uninterruptible Cast Color"]].b)
 	else
-		frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Casting Color"]].r, gUF.db.profile.module.castbar[L["Casting Color"]].g, gUF.db.profile.module.castbar[L["Casting Color"]].b)
+		frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Casting Color"]].r, pcUF.db.profile.module.castbar[L["Casting Color"]].g, pcUF.db.profile.module.castbar[L["Casting Color"]].b)
 	end
 end
 
 function CastBar:EventStopCast(event, unit, ...)
-	--gUF:Print("CastBar Module - "..event.." - "..unit)
+	--pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
@@ -276,7 +276,7 @@ function CastBar:EventStopCast(event, unit, ...)
 			frame.arcanebar.holdTime = 0
 			frame.arcanebar.delaySum = 0
 
-			-- if (gUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
+			-- if (pcUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
 			-- 	--frame.arcanebar.nametext:SetText(name)
 			-- 	frame.arcanebar.nametext:Hide()
 			-- 	frame.nametext:Show()
@@ -287,14 +287,14 @@ function CastBar:EventStopCast(event, unit, ...)
 end
 
 function CastBar:EventFailedCast(event, unit, ...)
-	--gUF:Print("CastBar Module - "..event.." - "..unit)
+	--pcUF:Print("CastBar Module - "..event.." - "..unit)
 
 	if not frames[unit] then return end
 
 	for frame in pairs(frames[unit]) do
 		if ( (frame.arcanebar:IsShown() and frame.arcanebar.casting and select(1, ...) == frame.arcanebar.castID) and not frame.arcanebar.fadeOut ) then
 			frame.arcanebar:SetValue(frame.arcanebar.maxValue)
-			frame.arcanebar:SetStatusBarColor(gUF.db.profile.module.castbar[L["Failed Cast Color"]].r, gUF.db.profile.module.castbar[L["Failed Cast Color"]].g, gUF.db.profile.module.castbar[L["Failed Cast Color"]].b)
+			frame.arcanebar:SetStatusBarColor(pcUF.db.profile.module.castbar[L["Failed Cast Color"]].r, pcUF.db.profile.module.castbar[L["Failed Cast Color"]].g, pcUF.db.profile.module.castbar[L["Failed Cast Color"]].b)
 			--if (frame.arcanebar.spark) then
 				frame.arcanebar.spark:Hide()
 			--end
@@ -324,7 +324,7 @@ function CastBar:EventUnitChanged(event)
 		--frame.arcanebar:SetValue(0)
 		frame.arcanebar:Hide()
 
-		if (gUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
+		if (pcUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
 			frame.arcanebar.nametext:Hide()
 			frame.nametext:Show()
 		end
@@ -342,7 +342,7 @@ function CastBar:EventUnitChanged(event)
 		-- 	--frame.arcanebar.Flash:Hide()
 		-- 	frame.arcanebar:Hide()
 		--
-		-- 	if (gUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
+		-- 	if (pcUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
 		-- 		frame.arcanebar.nametext:Hide()
 		-- 		frame.nametext:Show()
 		-- 	end
@@ -353,13 +353,13 @@ function CastBar:EventUnitChanged(event)
 end
 
 function CastBar:Reload()
-	gUF:Print("CastBar Module - Reload")
+	pcUF:Print("CastBar Module - Reload")
 end
 
 function CastBar:OnUpdate(elapsed)
 	local getTime = GetTime()
 
-	if (gUF.db.profile.module.castbar[L["Display Cast Timer"]]) then
+	if (pcUF.db.profile.module.castbar[L["Display Cast Timer"]]) then
 
 		local current_time
 
@@ -381,13 +381,13 @@ function CastBar:OnUpdate(elapsed)
 			text = string.sub(text, 1, 4)
 		end
 
-		--gUF:Print("delaySum = "..self.delaySum)
+		--pcUF:Print("delaySum = "..self.delaySum)
 		if (self.delaySum ~= 0) then
 			--local delay = string.sub(math.max(self.delaySum / 1000, 0) + 0.001, 1, 4)
 			--local delay = self.delaySum - self.delaySum - self.delaySum
 			--local delay = string.sub(math.max(self.delaySum - self.delaySum - self.delaySum) + 0.001, 1, 4)
 			local delay = string.sub(math.abs(self.delaySum) + 0.001, 1, 4)
-			--gUF:Print("delaySum = "..self.delaySum)
+			--pcUF:Print("delaySum = "..self.delaySum)
 			if (self.channeling) then
 				self.sign = "-"
 			else
@@ -476,7 +476,7 @@ function CastBar:OnUpdate(elapsed)
 		else
 			self.fadeOut = nil
 			self:Hide()
-			if (gUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
+			if (pcUF.db.profile.module.castbar[L["Replace Unit Names"]]) then
 				self.nametext:Hide()
 				self:GetParent().nametext:Show()
 			end
@@ -485,21 +485,21 @@ function CastBar:OnUpdate(elapsed)
 end
 
 function CastBar:CreateRemoveFrames()
-	gUF:Print("CastBar Module - CreateRemoveFrames")
-	-- local frames = gUF:GetActiveUnitFrameNames()
+	pcUF:Print("CastBar Module - CreateRemoveFrames")
+	-- local frames = pcUF:GetActiveUnitFrameNames()
 	-- for i in pairs(frames) do
-	-- 	--gUF:Print(frames[i].."_NameFrameOverlay")
-	-- 	gUF:Print(frames[i])
+	-- 	--pcUF:Print(frames[i].."_NameFrameOverlay")
+	-- 	pcUF:Print(frames[i])
 	-- end
 
-	--local frames = gUF:GetActiveUnitFrames()
-	frames = gUF:GetActiveUnitFrames()
+	--local frames = pcUF:GetActiveUnitFrames()
+	frames = pcUF:GetActiveUnitFrames()
 	for i,v in pairs(frames) do
 		for frame in pairs(v) do
 			if (frame.arcanebar == nil) then
-				--gUF:Print(tostring(frame.unit))
-				--gUF:Print(tostring(frame.nameframeoverlay:GetName()))
-				--gUF:Print(tostring(frame:GetName()))
+				--pcUF:Print(tostring(frame.unit))
+				--pcUF:Print(tostring(frame.nameframeoverlay:GetName()))
+				--pcUF:Print(tostring(frame:GetName()))
 
 				--local frame = CreateFrame("Frame", framename, UIParent, nil)
 				--frame:SetFrameStrata("LOW")
@@ -524,20 +524,20 @@ function CastBar:CreateRemoveFrames()
 				frame.arcanebar:GetStatusBarTexture():SetVertTile(false)
 				--frame.arcanebar:SetStatusBarColor(0, 0.65, 0)
 
-				--gUF:Print(frame.nameframe:GetHeight())
+				--pcUF:Print(frame.nameframe:GetHeight())
 
 				frame.arcanebar:SetMinMaxValues(0, 100)
 				frame.arcanebar:SetValue(0)
 				--frame.arcanebar:Show()
 
-				--gUF:Print(frame.arcanebar:GetValue())
+				--pcUF:Print(frame.arcanebar:GetValue())
 
 				--frame.healthbar:SetStatusBarColor(self.db.profile.global[L["Health Bar Color"]].r, self.db.profile.global[L["Health Bar Color"]].g, self.db.profile.global[L["Health Bar Color"]].b, self.db.profile.global[L["Health Bar Color"]].a)
 				--frame.bars += frame.arcanebar
-				--gUF:SetupStatusBarTextures(frame)
+				--pcUF:SetupStatusBarTextures(frame)
 
 				frame.arcanebar.Flash = frame.arcanebar:CreateTexture(nil, "OVERLAY", nil)
-				frame.arcanebar.Flash:SetTexture("Interface\\AddOns\\gUF\\Images\\gUF_CastBarFlash", 0, 0)
+				frame.arcanebar.Flash:SetTexture("Interface\\AddOns\\pcUF\\Images\\pcUF_CastBarFlash", 0, 0)
 				frame.arcanebar.Flash:SetBlendMode("ADD")
 				frame.arcanebar.Flash:SetWidth(frame.nameframe:GetWidth()+8)
 				frame.arcanebar.Flash:SetHeight(frame.nameframe:GetHeight()*2)

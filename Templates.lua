@@ -1,7 +1,7 @@
-local gUF = LibStub("AceAddon-3.0"):GetAddon("gUF")
-local L = LibStub("AceLocale-3.0"):GetLocale("gUF", true)
+local pcUF = LibStub("AceAddon-3.0"):GetAddon("pcUF")
+local L = LibStub("AceLocale-3.0"):GetLocale("pcUF", true)
 
-function gUF:CreateBaseFrameObject(framename, unit)										-- Player and Party frames
+function pcUF:CreateBaseFrameObject(framename, unit)										-- Player and Party frames
 	-- Create the unit frame object
 	local frame = CreateFrame("Frame", framename, UIParent, nil)
 	frame:SetFrameStrata("LOW")
@@ -244,7 +244,7 @@ function gUF:CreateBaseFrameObject(framename, unit)										-- Player and Party
 	return frame
 end
 
-function gUF:CreateBaseOfTargetFrameObject(framename, unit)								-- Target and Focus frames
+function pcUF:CreateBaseOfTargetFrameObject(framename, unit)								-- Target and Focus frames
 	-- Create the unit frame object
 	local frame = CreateFrame("Frame", framename, UIParent, nil)
 	frame:SetFrameStrata("LOW")
@@ -433,24 +433,24 @@ function gUF:CreateBaseOfTargetFrameObject(framename, unit)								-- Target and
 	return frame
 end
 
-function gUF:CreateOverlay(frame, parent, name)
+function pcUF:CreateOverlay(frame, parent, name)
 	local overlay = CreateFrame("Button", frame:GetName()..name, parent, "SecureUnitButtonTemplate")	-- Give these frames a name so they can be managed by Clique
 
 	overlay:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, 0)
 	overlay:RegisterForClicks("AnyUp")
 	overlay:RegisterForDrag("LeftButton")
-	overlay:SetScript("OnDragStart", function () gUF:DragStart(frame) end)
-	overlay:SetScript("OnDragStop", function () gUF:DragStop(frame) end)
+	overlay:SetScript("OnDragStart", function () pcUF:DragStart(frame) end)
+	overlay:SetScript("OnDragStop", function () pcUF:DragStop(frame) end)
 	overlay:SetScript("OnEnter", function () UnitFrame_OnEnter(frame) end)
 	overlay:SetScript("OnLeave", function () UnitFrame_OnLeave(frame) end)
 	overlay:SetHeight(parent:GetHeight())
 	overlay:SetWidth(parent:GetWidth())
-	gUF:Overlay_OnLoad(frame, overlay, frame.unit)
+	pcUF:Overlay_OnLoad(frame, overlay, frame.unit)
 
 	return overlay
 end
 
-function gUF:CreateBuff(frame, id)
+function pcUF:CreateBuff(frame, id)
 	local buff = CreateFrame("Button", nil, frame, nil)
 
 	buff:SetScript("OnEnter", function () self:BuffTooltip(buff) end)
@@ -476,7 +476,7 @@ function gUF:CreateBuff(frame, id)
 	return buff
 end
 
-function gUF:CreateDebuff(frame, id)
+function pcUF:CreateDebuff(frame, id)
 	local debuff = CreateFrame("Button", nil, frame, nil)
 
 	debuff:SetScript("OnEnter", function () self:DebuffTooltip(debuff) end)

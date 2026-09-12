@@ -1,9 +1,9 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("gUF", "enUS", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("pcUF", "enUS", true)
 
 if (L) then
-	--L["gUF"] = true
+	--L["pcUF"] = true
 
-	-- Runtime Localizations (gUF will not function correctly unless this section is fully translated in your locale)
+	-- Runtime Localizations (pcUF will not function correctly unless this section is fully translated in your locale)
 	L["Curse"] = true
 	L["Dead"] = true
 	L["Disease"] = true
@@ -17,7 +17,7 @@ if (L) then
 	L["Stealth"] = true
 
 	-- General Addon Localizations
-	L["Failed to load gUF_Options.  The options menu failed to load because: "] = true
+	L["Failed to load pcUF_Options.  The options menu failed to load because: "] = true
 
 	-- Option Categories
 	L["CombatDisplay"] = true
