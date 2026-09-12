@@ -1,4 +1,4 @@
-## Interface: 120001
+## Interface: 120100
 ## Title: pcUF (Perl Classic Unit Frames)
 ## Notes: Unit Frame modification based on the Perl style
 ## Author: Global
