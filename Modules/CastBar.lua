@@ -35,6 +35,8 @@ function CastBar:OnEnable()
 	self.db = pcUF.db:RegisterNamespace("pcUFDB", self.defaults)
 
 	self:CreateRemoveFrames()											-- Create any frames that are enabled
+
+	--self:SetEnabledState(true)
 end
 
 function CastBar:OnDisable()

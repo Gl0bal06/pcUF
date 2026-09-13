@@ -34,7 +34,7 @@
 local pcUF = LibStub("AceAddon-3.0"):NewAddon("pcUF", "AceEvent-3.0")		-- Create the main addon object
 local L = LibStub("AceLocale-3.0"):GetLocale("pcUF", true)				-- Localizations
 pcUF.rev = "12.0.1 Alpha"
---local isPTR = select(4, GetBuildInfo()) >= 120001						-- Code for only getting a game toc to code for PTRs
+--local isPTR = select(4, GetBuildInfo()) >= 120100						-- Code for only getting a game toc to code for PTRs
 
 local frames = {}														-- Table for units we are currently listening for
 
@@ -1001,35 +1001,6 @@ function pcUF:UNIT_AURA(event, unit)
 				end
 			end
 		end
-
-		if (unit == "player") then
-			if (UnitClassBase("player") == "MONK") then
-				if (C_SpecializationInfo.GetSpecializationInfo(C_SpecializationInfo.GetSpecialization()) == 268) then
-					local unitsecondarypower = UnitStagger(unit)
-					local unitsecondarypowermax = UnitHealthMax(unit)
-
-					local roundedStagger = tonumber(string.format("%.0f", math.ceil(unitsecondarypower/unitsecondarypowermax)))
-
-					frame.secondarypowerbar:SetMinMaxValues(0, 100)
-					frame.secondarypowerbar:SetValue(roundedStagger)
-
-					frame.currentmaxsecondarypowertext:SetText(roundedStagger.."/"..100)
-					frame.percentsecondarypowertext:SetText(roundedStagger.."%")
-					--frame.deficitsecondarypowertext:SetText("-"..unitpowermax - unitpower)
-
-					if (roundedStagger < 30) then
-						frame.secondarypowerbar:SetStatusBarColor(0, 1, 0, 1)
-						frame.secondarypowerbarbg:SetStatusBarColor(0, 1, 0, 0.25)
-					elseif (roundedStagger > 29 and roundedStagger < 60) then
-						frame.secondarypowerbar:SetStatusBarColor(1, 1, 0, 1)
-						frame.secondarypowerbarbg:SetStatusBarColor(1, 1, 0, 0.25)
-					else
-						frame.secondarypowerbar:SetStatusBarColor(1, 0, 0, 1)
-						frame.secondarypowerbarbg:SetStatusBarColor(1, 0, 0, 0.25)
-					end
-				end
-			end
-		end
 	end
 end
 
@@ -1220,6 +1191,9 @@ end
 function pcUF:EnableDisableModules()
 	-- Wrap in an if statement to see if it really is enabled once options are built
 	--self:EnableModule("CastBar")
+	if (UnitClassBase("player") == "MONK") then
+		self:EnableModule("Stagger")
+	end
 end
 
 function pcUF:UpdateFrameInfo(unit)

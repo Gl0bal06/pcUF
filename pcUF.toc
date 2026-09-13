@@ -2,7 +2,7 @@
 ## Title: pcUF (Perl Classic Unit Frames)
 ## Notes: Unit Frame modification based on the Perl style
 ## Author: Global
-## Version: 7.0.1 Alpha
+## Version: 12.0.1 Alpha
 ## SavedVariables: pcUFDB
 ## X-Website: https://github.com/Gl0bal06/pcUF
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, Clique
@@ -25,3 +25,4 @@ pcUF.lua
 Templates.lua
 
 Modules\CastBar.lua
+Modules\Stagger.lua
